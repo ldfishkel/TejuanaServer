@@ -5,6 +5,7 @@ from data.dataAccess import *
 from data.product import *
 from factory.product import *
 from logger.logger import *
+from httpError import *
 
 class ProductTypeList:
 	def GET(self):
@@ -62,10 +63,10 @@ class UpdateProduct:
 
 		product = json.loads(data)
 
-		if validateProduct(product):
-			updateProduct(product, productId)
-		else:
-			logError("Error producto invalido")
+		validateProduct(product)
+		
+		updateProduct(product, productId)
+		
 
 class AddProductType:
 	def POST(self):
@@ -80,4 +81,5 @@ class AddProductType:
 ################################################################################
 
 def validateProduct(product):
-	return True
+	if (product["Name"] == "hola"):
+		raise BadRequest("Producto invalido: No puede llamarse hola")

@@ -19,7 +19,7 @@ def logLastInseted(lastid):
 	print "--END Last Inserted ID--   " 
 	print "\n"
 
-def logError(error):
+def logErrorMsg(error):
 	print "\n"
 	print "--BEGIN Error--   " 
 	print error
