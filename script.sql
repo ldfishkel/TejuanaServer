@@ -1,23 +1,28 @@
 USE Tejuana;
 
 /****************************************************************************************************************/
-/**PROPIEDADES DE TRANSACCIONES**/
+/******************************************PROPIEDADES DE TRANSACCIONES******************************************/
 /****************************************************************************************************************/
+
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
 /****************************************************************************************************************/
-/**BORRAR TABLAS**/
+/******************************************BORRAR TABLAS*********************************************************/
 /****************************************************************************************************************/
+
 DROP TABLE IF EXISTS Tejuana.Client_Detail;
 DROP TABLE IF EXISTS Tejuana.Client;
 DROP TABLE IF EXISTS Tejuana.Product_Supply;
 DROP TABLE IF EXISTS Tejuana.Supply;
 DROP TABLE IF EXISTS Tejuana.Product;
+DROP TABLE IF EXISTS Tejuana.Product_Type_Tag;
 DROP TABLE IF EXISTS Tejuana.Product_Type;
+DROP TABLE IF EXISTS Tejuana.Tag;
 
 /****************************************************************************************************************/
-/**CREAR TABLAS**/
+/******************************************CREAR TABLAS**********************************************************/
 /****************************************************************************************************************/
+
 CREATE TABLE IF NOT EXISTS Tejuana.Client (
 	client_id INT AUTO_INCREMENT,
 	cleint_fb_id INT,
@@ -68,6 +73,26 @@ CREATE TABLE IF NOT EXISTS Tejuana.Product_Supply (
 	FOREIGN KEY (product_id) REFERENCES Tejuana.Product(product_id),
 	FOREIGN KEY (supply_id) REFERENCES Tejuana.Supply(supply_id)
 );
+
+CREATE TABLE IF NOT EXISTS Tejuana.Tag (
+	tag_id INT NOT NULL,
+	tag_name VARCHAR(100) NOT NULL UNIQUE,
+	PRIMARY KEY (tag_id)
+);
+
+CREATE TABLE IF NOT EXISTS Tejuana.Product_Type_Tag (
+	product_type_id INT NOT NULL,	
+	tag_id INT NOT NULL,
+	PRIMARY KEY (product_type_id, tag_id),
+	FOREIGN KEY (product_type_id) REFERENCES Tejuana.Product_Type(product_type_id),
+	FOREIGN KEY (tag_id) REFERENCES Tejuana.Tag(tag_id)
+);
+
+
+/***********************************************************************************************************/
+/***************************** VIEWS FUNCTIONS PROCEDURES **************************************************/
+/***********************************************************************************************************/
+
 DROP VIEW IF EXISTS Tejuana.ProductList;
 CREATE VIEW Tejuana.ProductList
 AS 
@@ -94,7 +119,6 @@ AS
 		p.product_id = ps.product_id AND
 		s.supply_id = ps.supply_id;
 
-
 DROP VIEW IF EXISTS Tejuana.ProductSuppliesList;
 CREATE VIEW Tejuana.ProductSuppliesList
 AS 
@@ -118,7 +142,8 @@ CREATE PROCEDURE Tejuana.ProductListBy (prodType INT)
 		p.product_size,
 		s.supply_id,
 		s.supply_name,
-		ps.quantity
+		ps.quantity,
+		p.product_stock
 	FROM
 		Tejuana.Product AS p,
 		Tejuana.Product_Type AS pt,
@@ -135,8 +160,6 @@ DROP PROCEDURE IF EXISTS Tejuana.InsertProduct;
 DELIMITER //
 CREATE PROCEDURE Tejuana.InsertProduct (prodName VARCHAR(100), price NUMERIC(15,2), size VARCHAR(10), typeId INT, avgTime INT, imageUrl VARCHAR(255), stock INT)
 BEGIN
-	DECLARE lastId INT;
-	
 	INSERT INTO 
 		Tejuana.Product (product_name, product_cost, product_size, product_type_id, product_tejuar_avg, product_image, product_stock) 
 	VALUES
@@ -165,6 +188,23 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS Tejuana.InsertProductType;
+DELIMITER //
+CREATE PROCEDURE Tejuana.InsertProductType (prodTypeName VARCHAR(50))
+BEGIN
+	INSERT INTO 
+		Tejuana.Product_Type (product_type_name)
+	VALUES
+		(prodTypeName);
+	
+	SELECT last_insert_id();
+END //
+DELIMITER ;
+
+/***********************************************************************************************************/
+/*************************************** SEED **************************************************************/
+/***********************************************************************************************************/
+
 INSERT INTO Tejuana.Product_Type VALUES (1, 'Leodan');
 INSERT INTO Tejuana.Product VALUES (1, 'Leodan deluxe', 300, 'XL', 1, 5, 120, 'https://scontent-gru2-1.xx.fbcdn.net/t45.5328-0/p180x540/14057493_1212721252133415_1344293813_n.jpg');
 INSERT INTO Tejuana.Product VALUES (2, 'Leodan platinum', 350, 'XL', 1, 6, 120, 'https://fb-s-d-a.akamaihd.net/h-ak-xpt1/v/t1.0-9/15178202_1358275414192090_2732619573659142335_n.jpg?oh=9185a9027c5e552a90741ab3d7aea728&oe=58FC35F1&__gda__=1490022246_44d183b51eb2d5bbff97ab7da99ef6d5');
@@ -182,3 +222,20 @@ INSERT INTO Tejuana.Product VALUES (4, 'Top Mery Crudo', 220, 'M', 2, 8, 100, 'h
 INSERT INTO Tejuana.Supply VALUES (4, 'Hilo Rosa');
 INSERT INTO Tejuana.Product_Supply VALUES (3, 4, 200);
 INSERT INTO Tejuana.Product_Supply VALUES (4, 2, 250);
+
+INSERT INTO Tejuana.Tag VALUES (1, 'verano');
+INSERT INTO Tejuana.Tag VALUES (2, 'invierno');
+INSERT INTO Tejuana.Tag VALUES (3, 'top');
+INSERT INTO Tejuana.Tag VALUES (4, 'colorido');
+INSERT INTO Tejuana.Tag VALUES (5, 'calor');
+INSERT INTO Tejuana.Tag VALUES (6, 'playa');
+
+INSERT INTO Tejuana.Product_Type_Tag VALUES (1, 1);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (1, 3);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (1, 5);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (2, 2);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (2, 4);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (2, 5);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (1, 6);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (1, 4);
+INSERT INTO Tejuana.Product_Type_Tag VALUES (2, 3);

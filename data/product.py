@@ -28,7 +28,7 @@ def insertProduct(product):
 			else:
 				sql = sql + ",({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
 
-		print sql
+		logQuery(sql)
 
 		cursor.close()
 		
@@ -90,6 +90,67 @@ def updateProduct(product, productId):
 	
 	except MySQLdb.Error, e:
 		
+		logError(e[0], e[1])
+		db.rollback()
+
+	db.close()
+
+def insertTag(tag):
+	db = connect()
+	cursor = db.cursor()
+
+	try:
+		sql = "INSERT INTO Tejuana.Tag (tag_name) VALUES ('{0}')".format(tag["Name"])
+
+		logQuery(sql)
+
+		cursor.execute(sql)
+
+		db.commit()
+
+	except MySQLdb.Error, e:
+
+		logError(e[0], e[1])
+		db.rollback()
+
+	db.close()
+
+def insertProductType(productType):
+	db = connect()
+	cursor = db.cursor()
+
+	try:
+		sql = "Call Tejuana.InsertProductType('{0}')".format(productType["Name"])
+
+		logQuery(sql)
+		
+		cursor.execute(sql)
+
+		productTypeId = int(cursor.fetchone()[0])
+		
+		cursor.close()
+		
+		logLastInseted(productTypeId)
+		
+		sql = None
+		
+		for tag in productType["Tags"]:
+			
+			if sql is None:
+				sql = "INSERT INTO Tejuana.Product_Type_Tag VALUES ({0}, {1})".format(productTypeId, tag["Id"])
+			else:
+				sql = sql + ",({0}, {1})".format(productTypeId, tag["Id"])
+
+		logQuery(sql)
+
+		cursor = db.cursor()
+
+		cursor.execute(sql)
+
+		db.commit()
+
+	except MySQLdb.Error, e:
+	
 		logError(e[0], e[1])
 		db.rollback()
 

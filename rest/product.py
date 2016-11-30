@@ -8,28 +8,36 @@ from logger.logger import *
 
 class ProductTypeList:
 	def GET(self):
-
 		results = query("select * from Tejuana.Product_Type")
 		return productTypeListFactory(results)
 
 class ProductList:            
-    def GET(self):
-		
+    def GET(self):		
 		results = query("select * from Tejuana.ProductList")
 		return productListFactory(results)
 
 
 class ProductListBy:           
-    def GET(self, prodType):
-		
+    def GET(self, prodType):		
 		results = query("call Tejuana.ProductListBy({0})".format(prodType))
 		return productListFactory(results)
 
 class ProductSupplies:
 	def GET(self):
-
 		results = query("select * from Tejuana.ProductSuppliesList")
 		return productSuppliesListFactory(results)
+
+class Tags:
+	def GET(self):
+		results = query("select * from Tejuana.Tag")
+		return tagFactory(results)
+
+	def POST(self):
+		data = web.data()
+		logPayload(data)
+		tag = json.loads(data)
+		insertTag(tag)
+
 
 class AddProduct:
     def POST(self):
@@ -58,6 +66,13 @@ class UpdateProduct:
 			updateProduct(product, productId)
 		else:
 			logError("Error producto invalido")
+
+class AddProductType:
+	def POST(self):
+		data = web.data()
+		logPayload(data)
+		productType = json.loads(data)
+		insertProductType(productType)
 			
 
 ################################################################################

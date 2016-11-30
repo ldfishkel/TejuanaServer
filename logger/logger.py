@@ -12,10 +12,10 @@ def logPayload(payload):
 	print "--END Payload--   " 
 	print "\n"
 
-def logLastInseted(id):
+def logLastInseted(lastid):
 	print "\n"
 	print "--BEGIN Last Inserted ID--   " 
-	print payload
+	print lastid
 	print "--END Last Inserted ID--   " 
 	print "\n"
 

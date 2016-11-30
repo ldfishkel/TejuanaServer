@@ -9,7 +9,9 @@ urls = (
     '/products/(.*)'  , 'ProductListBy' ,       #GET
     '/product'        , 'AddProduct',           #POST
     '/product/(.*)'   , 'UpdateProduct',        #POST
-    '/productsupplies', 'ProductSupplies'       #GET
+    '/productsupplies', 'ProductSupplies',      #GET
+    '/tags'           , 'Tags',                 #GET #POST
+    '/producttype'    , 'AddProductType'        #POST
 )
 
 app = web.application(urls, globals())

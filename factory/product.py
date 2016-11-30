@@ -35,3 +35,11 @@ def productSuppliesListFactory(results):
 		productSupplies.append(Supply(row[0], row[1], 0))
 
 	return MyEncoder().encode(productSupplies)
+
+def tagFactory(results):
+	tags = []
+
+	for row in results:
+		tags.append(Tag(row[0], row[1]))
+
+	return MyEncoder().encode(tags)

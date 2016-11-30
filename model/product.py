@@ -20,3 +20,8 @@ class Supply:
 	    self.Id = id
 	    self.Name = name
 	    self.Amount = quantity
+
+class Tag:
+	def __init__(self, id, name):
+	    self.Id = id
+	    self.Name = name
