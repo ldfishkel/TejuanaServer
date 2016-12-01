@@ -2,9 +2,9 @@ import MySQLdb
 
 from dataAccess import *
 from logger.logger import *
+from rest.httpError import InternalServerError
 
 def insertProduct(product):
-
 	db = connect()
 	cursor = db.cursor()
 
@@ -12,11 +12,8 @@ def insertProduct(product):
 		sql = "CALL Tejuana.InsertProduct('{0}', {1}, '{2}', {3}, {4}, '{5}', {6})".format(product["Name"], product["Price"], product["Size"], product["Type"]["Id"], product["AvgProductionTime"], product["ImageURL"], product["Stock"])
 		
 		logQuery(sql)
-
 		cursor.execute(sql)
-		
 		prodId = int(cursor.fetchone()[0])
-
 		logLastInseted(prodId)
 		
 		sql = None
@@ -29,44 +26,35 @@ def insertProduct(product):
 				sql = sql + ",({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
 
 		logQuery(sql)
-
 		cursor.close()
-		
 		cursor = db.cursor()
-		
 		logQuery(sql)
-
 		cursor.execute(sql)
-
 		db.commit()
+		cursor.close()
+		db.close()
 	
 	except MySQLdb.Error, e:
-		
-		logError(e[0], e[1])
 		db.rollback()
+		cursor.close()
+		db.close()
+		raise InternalServerError("Error en la base de datos. \n" + errorMessage(e))
 
-	db.close()
-
-def updateProduct(product, productId):
-	
+def updateProduct(product):
 	db = connect()
 	cursor = db.cursor()
 
 	try:
-		sql = "CALL Tejuana.UpdateProduct({0}, '{1}', {2}, '{3}', {4}, {5}, '{6}', {7})".format(productId, product["Name"], product["Price"], product["Size"], product["Type"]["Id"], product["AvgProductionTime"], product["ImageURL"], product["Stock"])
+		sql = "CALL Tejuana.UpdateProduct({0}, '{1}', {2}, '{3}', {4}, {5}, '{6}', {7})".format(product["Id"], product["Name"], product["Price"], product["Size"], product["Type"]["Id"], product["AvgProductionTime"], product["ImageURL"], product["Stock"])
 
 		logQuery(sql)
-		
 		cursor.execute(sql)
-
 		cursor.close()
-
 		cursor = db.cursor()
 
-		sql = "DELETE FROM Tejuana.Product_Supply WHERE product_id = {0}".format(productId)
+		sql = "DELETE FROM Tejuana.Product_Supply WHERE product_id = {0}".format(product["Id"])
 
 		logQuery(sql)
-
 		cursor.execute(sql)
 
 		sql = None
@@ -74,26 +62,23 @@ def updateProduct(product, productId):
 		for supply in product["Supplies"]:
 			
 			if sql is None:
-				sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(productId, supply["Id"], supply["Amount"])
+				sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
 			else:
-				sql = sql + ",({0}, {1}, {2})".format(productId, supply["Id"], supply["Amount"])
+				sql = sql + ",({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
 
 		cursor.close()
-
 		cursor = db.cursor()
-
 		logQuery(sql)
-
 		cursor.execute(sql)
-
 		db.commit()
+		cursor.close()
+		db.close()
 	
 	except MySQLdb.Error, e:
-		
-		logError(e[0], e[1])
 		db.rollback()
-
-	db.close()
+		cursor.close()
+		db.close()
+		raise InternalServerError("Error en la base de datos. \n" + errorMessage(e))
 
 def insertTag(tag):
 	db = connect()
@@ -103,17 +88,15 @@ def insertTag(tag):
 		sql = "INSERT INTO Tejuana.Tag (tag_name) VALUES ('{0}')".format(tag["Name"])
 
 		logQuery(sql)
-
 		cursor.execute(sql)
-
 		db.commit()
-
+		cursor.close()
+		db.close()
 	except MySQLdb.Error, e:
-
-		logError(e[0], e[1])
 		db.rollback()
-
-	db.close()
+		cursor.close()
+		db.close()
+		raise InternalServerError("Error en la base de datos. \n" + errorMessage(e))
 
 def insertProductType(productType):
 	db = connect()
@@ -123,13 +106,9 @@ def insertProductType(productType):
 		sql = "Call Tejuana.InsertProductType('{0}')".format(productType["Name"])
 
 		logQuery(sql)
-		
 		cursor.execute(sql)
-
 		productTypeId = int(cursor.fetchone()[0])
-		
 		cursor.close()
-		
 		logLastInseted(productTypeId)
 		
 		sql = None
@@ -142,16 +121,13 @@ def insertProductType(productType):
 				sql = sql + ",({0}, {1})".format(productTypeId, tag["Id"])
 
 		logQuery(sql)
-
 		cursor = db.cursor()
-
 		cursor.execute(sql)
-
 		db.commit()
-
+		cursor.close()
+		db.close()
 	except MySQLdb.Error, e:
-	
-		logError(e[0], e[1])
 		db.rollback()
-
-	db.close()
+		cursor.close()
+		db.close()
+		raise InternalServerError("Error en la base de datos. \n" + errorMessage(e))

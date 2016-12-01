@@ -1,35 +1,20 @@
 def logQuery(sql):
-	print "\n"
-	print "--BEGIN Executing Query--   " 
+	print "-- Executing Query --  \n" 
 	print sql
-	print "--END Executing Query--   " 
-	print "\n"
+	print "--"
 
 def logPayload(payload):
-	print "\n"
-	print "--BEGIN Payload--   " 
+	print "-- Payload --   \n" 
 	print payload
-	print "--END Payload--   " 
-	print "\n"
+	print "--"
 
 def logLastInseted(lastid):
-	print "\n"
-	print "--BEGIN Last Inserted ID--   " 
+	print "-- Last Inserted ID --   \n" 
 	print lastid
-	print "--END Last Inserted ID--   " 
-	print "\n"
+	print "--"
 
 def logErrorMsg(error):
-	print "\n"
-	print "--BEGIN Error--   " 
+	print "-- Error --   \n" 
 	print error
-	print "--END Error--   " 
-	print "\n"
-
-def logError(e1, e2):
-	print "\n"
-	print "--BEGIN Error--   " 
-	print e1, e2
-	print "--END Error--   " 
-	print "\n"
+	print "--"
 

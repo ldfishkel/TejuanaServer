@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Tejuana.Client (
 
 CREATE TABLE IF NOT EXISTS Tejuana.Client_Detail (
 	client_detail_id INT NOT NULL,
-	client_detail_dni INT NOT NULL,
+	client_detail_dni INT NOT NULL UNIQUE,
 	client_detail_address VARCHAR(255),
 	client_detail_zipcode VARCHAR(20),
 	FOREIGN KEY (client_detail_id) REFERENCES Tejuana.Client(client_id)
@@ -42,13 +42,13 @@ CREATE TABLE IF NOT EXISTS Tejuana.Client_Detail (
 
 CREATE TABLE IF NOT EXISTS Tejuana.Product_Type (
 	product_type_id INT AUTO_INCREMENT,
-	product_type_name VARCHAR(50),
+	product_type_name VARCHAR(50) UNIQUE,
 	PRIMARY KEY (product_type_id)
 );
 
 CREATE TABLE IF NOT EXISTS Tejuana.Product (
 	product_id INT AUTO_INCREMENT,
-	product_name VARCHAR(100) NOT NULL,
+	product_name VARCHAR(100) NOT NULL UNIQUE,
 	product_cost NUMERIC(15,2) NOT NULL,
 	product_size VARCHAR(10),
 	product_type_id INT,
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS Tejuana.Product_Supply (
 );
 
 CREATE TABLE IF NOT EXISTS Tejuana.Tag (
-	tag_id INT NOT NULL,
-	tag_name VARCHAR(100) NOT NULL UNIQUE,
+	tag_id INT AUTO_INCREMENT,
+	tag_name VARCHAR(30) NOT NULL UNIQUE,
 	PRIMARY KEY (tag_id)
 );
 

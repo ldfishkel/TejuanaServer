@@ -5,10 +5,8 @@ from rest.product import *
 
 urls = (
     '/producttypes'   , 'ProductTypeList',      #GET
-    '/products'       , 'ProductList',          #GET
-    '/products/(.*)'  , 'ProductListBy' ,       #GET
-    '/product'        , 'AddProduct',           #POST
-    '/product/(.*)'   , 'UpdateProduct',        #POST
+    '/product/(.*)'   , 'ProductsByType' ,      #GET
+    '/product'        , 'Product',              #POST #PUT #GET
     '/productsupplies', 'ProductSupplies',      #GET
     '/tags'           , 'Tags',                 #GET #POST
     '/producttype'    , 'AddProductType'        #POST

@@ -6,10 +6,14 @@ class RestError(web.HTTPError):
 		logErrorMsg(message)
 		status = statusCode
 		headers = {'Content-Type': 'text/html'}
-		data = "<h1>" + message + "</h1>"
+		data = message
 		web.HTTPError.__init__(self, status, headers, data)
 
 class BadRequest(RestError):
 	def __init__(self, msg):
 		RestError.__init__(self, '400', msg)
+
+class InternalServerError(RestError):
+	def __init__(self, msg):
+		RestError.__init__(self, '500', msg)
 

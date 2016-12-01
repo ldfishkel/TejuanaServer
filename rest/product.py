@@ -12,17 +12,6 @@ class ProductTypeList:
 		results = query("select * from Tejuana.Product_Type")
 		return productTypeListFactory(results)
 
-class ProductList:            
-    def GET(self):		
-		results = query("select * from Tejuana.ProductList")
-		return productListFactory(results)
-
-
-class ProductListBy:           
-    def GET(self, prodType):		
-		results = query("call Tejuana.ProductListBy({0})".format(prodType))
-		return productListFactory(results)
-
 class ProductSupplies:
 	def GET(self):
 		results = query("select * from Tejuana.ProductSuppliesList")
@@ -39,34 +28,29 @@ class Tags:
 		tag = json.loads(data)
 		insertTag(tag)
 
+class ProductsByType:
+	def GET(self, prodType):		
+		results = query("call Tejuana.ProductListBy({0})".format(prodType))
+		return productListFactory(results)
 
-class AddProduct:
-    def POST(self):
-        
+class Product:
+	def GET(self):		
+		results = query("select * from Tejuana.ProductList")
+		return productListFactory(results)
+
+	def POST(self):
 		data = web.data()
-
 		logPayload(data)
-
 		product = json.loads(data)
-
-		if validateProduct(product):
-			insertProduct(product)
-		else:
-			logError("Error producto invalido")
-
-class UpdateProduct:
-	def POST(self, productId):
-
-		data = web.data()
-
-		logPayload(data)
-
-		product = json.loads(data)
-
 		validateProduct(product)
-		
+		insertProduct(product)
+
+	def PUT(self):
+		data = web.data()
+		logPayload(data)
+		product = json.loads(data)
+		validateProduct(product)
 		updateProduct(product, productId)
-		
 
 class AddProductType:
 	def POST(self):
