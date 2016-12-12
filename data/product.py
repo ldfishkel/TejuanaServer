@@ -16,20 +16,36 @@ def insertProduct(product):
 		prodId = int(cursor.fetchone()[0])
 		logLastInseted(prodId)
 		
-		sql = None
-		
-		for supply in product["Supplies"]:
+		if product["Supplies"]:
+			cursor.close()
+			cursor = db.cursor()
+			sql = None
 			
-			if sql is None:
-				sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
-			else:
-				sql = sql + ",({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
+			for supply in product["Supplies"]:
+				
+				if sql is None:
+					sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
+				else:
+					sql = sql + ",({0}, {1}, {2})".format(prodId, supply["Id"], supply["Amount"])
 
-		logQuery(sql)
-		cursor.close()
-		cursor = db.cursor()
-		logQuery(sql)
-		cursor.execute(sql)
+			logQuery(sql)
+			cursor.execute(sql)
+
+		if product["Images"]:
+			cursor.close()
+			cursor = db.cursor()
+			sql = None
+			
+			for image in product["Images"]:
+				
+				if sql is None:
+					sql = "INSERT INTO Tejuana.Product_Image (product_id, product_image_url) VALUES ({0}, '{1}')".format(prodId, image)
+				else:
+					sql = sql + ",({0}, '{1}')".format(prodId, image)
+
+			logQuery(sql)
+			cursor.execute(sql)
+
 		db.commit()
 		cursor.close()
 		db.close()
@@ -45,31 +61,56 @@ def updateProduct(product):
 	cursor = db.cursor()
 
 	try:
-		sql = "CALL Tejuana.UpdateProduct({0}, '{1}', {2}, '{3}', {4}, {5}, '{6}', {7})".format(product["Id"], product["Name"], product["Price"], product["Size"], product["Type"]["Id"], product["AvgProductionTime"], product["ImageURL"], product["Stock"])
+		sql = "CALL Tejuana.UpdateProduct({0}, '{1}', {2}, '{3}', {4}, {5}, '{6}')".format(product["Id"], product["Name"], product["Price"], product["Size"], product["Type"]["Id"], product["AvgProductionTime"], product["Stock"])
 
 		logQuery(sql)
 		cursor.execute(sql)
-		cursor.close()
-		cursor = db.cursor()
+		
 
 		sql = "DELETE FROM Tejuana.Product_Supply WHERE product_id = {0}".format(product["Id"])
 
-		logQuery(sql)
-		cursor.execute(sql)
-
-		sql = None
-		
-		for supply in product["Supplies"]:
-			
-			if sql is None:
-				sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
-			else:
-				sql = sql + ",({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
-
 		cursor.close()
 		cursor = db.cursor()
 		logQuery(sql)
 		cursor.execute(sql)
+
+		if product["Supplies"]:
+			cursor.close()
+			cursor = db.cursor()
+			sql = None
+			
+			for supply in product["Supplies"]:
+				
+				if sql is None:
+					sql = "INSERT INTO Tejuana.Product_Supply VALUES ({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
+				else:
+					sql = sql + ",({0}, {1}, {2})".format(product["Id"], supply["Id"], supply["Amount"])
+
+			logQuery(sql)
+			cursor.execute(sql)
+
+		if product["Images"]:
+			cursor.close()
+			cursor = db.cursor()
+			sql = "DELETE FROM Tejuana.Product_Image WHERE product_id = {0}".format(product["Id"])
+
+			cursor.close()
+			cursor = db.cursor()
+			logQuery(sql)
+			cursor.execute(sql)
+
+			sql = None
+			
+			for image in product["Images"]:
+				
+				if sql is None:
+					sql = "INSERT INTO Tejuana.Product_Image (product_id, product_image_url) VALUES ({0}, '{1}')".format(product["Id"], image)
+				else:
+					sql = sql + ",({0}, '{1}')".format(product["Id"], image)
+
+			logQuery(sql)
+			cursor.execute(sql)
+
 		db.commit()
 		cursor.close()
 		db.close()

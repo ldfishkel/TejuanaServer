@@ -2,14 +2,41 @@
 import web
 
 from rest.product import *
+from rest.supply import *
+from rest.order import *
+from rest.shipping import *
+from rest.pickup import *
+from rest.purchase import *
+from rest.security import *
 
 urls = (
-    '/producttypes'   , 'ProductTypeList',      #GET
-    '/product/(.*)'   , 'ProductsByType' ,      #GET
-    '/product'        , 'Product',              #POST #PUT #GET
-    '/productsupplies', 'ProductSupplies',      #GET
-    '/tags'           , 'Tags',                 #GET #POST
-    '/producttype'    , 'AddProductType'        #POST
+    #Admin
+    '/token'          , 'Token',
+
+    '/producttypes'   , 'ProductTypeList',      
+    '/product/(.*)'   , 'ProductsByType',      
+    '/product'        , 'Product',               
+    '/productsupplies', 'ProductSupplies',      
+    '/tags'           , 'Tags',                  
+    '/producttype'    , 'AddProductType',      
+
+    '/supplydata'     , 'SupplyData',
+    '/supply'         , 'Supply',
+    '/supplymov'      , 'SupplyMov',
+
+    '/order'          , 'Order',
+    '/order/(.*)'     , 'Order',
+    '/orderr'         , 'Orderr',
+
+    '/shipping/(.*)'  , 'Shipping',
+    '/shippingstatus' , 'ShippingStatus',
+
+    '/pickup/(.*)'    , 'PickUp',
+    '/pickupstatus'   , 'PickUpStatus',
+
+    '/purchase/(.*)'  , 'Purchase',
+    '/purchasestatus' , 'PurchaseStatus',
+
 )
 
 app = web.application(urls, globals())

@@ -1,10 +1,10 @@
 class Product:
-	def __init__(self, id, name, prodType, imageURL, tejuarAvgTime, price, size, stock):
+	def __init__(self, id, name, prodType, tejuarAvgTime, price, size, stock):
 	    self.Id = id
 	    self.Name = name
 	    self.Supplies = []
 	    self.Type = prodType
-	    self.ImageURL = imageURL
+	    self.Images = []
 	    self.AvgProductionTime = tejuarAvgTime
 	    self.Price = float(price)
 	    self.Size = size
@@ -15,7 +15,7 @@ class ProductType:
 	    self.Id = id
 	    self.Name = name
 
-class Supply:
+class ProductSupply:
 	def __init__(self, id, name, quantity):
 	    self.Id = id
 	    self.Name = name

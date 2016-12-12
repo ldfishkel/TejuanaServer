@@ -1,4 +1,5 @@
 import MySQLdb
+from rest.httpError import InternalServerError
 from logger.logger import *
 
 def connect():

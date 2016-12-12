@@ -1,6 +1,6 @@
 import web
 import json
-
+from data.security import *
 from data.dataAccess import *
 from data.product import *
 from factory.product import *
@@ -9,55 +9,68 @@ from httpError import *
 
 class ProductTypeList:
 	def GET(self):
-		results = query("select * from Tejuana.Product_Type")
-		return productTypeListFactory(results)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			results = query("select * from Tejuana.Product_Type")
+			return productTypeListFactory(results)
 
 class ProductSupplies:
 	def GET(self):
-		results = query("select * from Tejuana.ProductSuppliesList")
-		return productSuppliesListFactory(results)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			results = query("select * from Tejuana.ProductSuppliesList")
+			return productSuppliesListFactory(results)
 
 class Tags:
 	def GET(self):
-		results = query("select * from Tejuana.Tag")
-		return tagFactory(results)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			results = query("select * from Tejuana.Tag")
+			return tagFactory(results)
 
 	def POST(self):
-		data = web.data()
-		logPayload(data)
-		tag = json.loads(data)
-		insertTag(tag)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			data = web.data()
+			logPayload(data)
+			tag = json.loads(data)
+			insertTag(tag)
 
 class ProductsByType:
-	def GET(self, prodType):		
-		results = query("call Tejuana.ProductListBy({0})".format(prodType))
-		return productListFactory(results)
+	def GET(self, prodType):
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			results = query("call Tejuana.ProductListBy({0})".format(prodType))
+			images = query("SELECT * FROM Tejuana.Product_Image")
+
+			return productListFactory(results, images)
 
 class Product:
-	def GET(self):		
-		results = query("select * from Tejuana.ProductList")
-		return productListFactory(results)
+	def GET(self):	
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			results = query("select * from Tejuana.ProductList")
+			images = query("SELECT * FROM Tejuana.Product_Image")
+
+			return productListFactory(results, images)
 
 	def POST(self):
-		data = web.data()
-		logPayload(data)
-		product = json.loads(data)
-		validateProduct(product)
-		insertProduct(product)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			data = web.data()
+			logPayload(data)
+			product = json.loads(data)
+			validateProduct(product)
+			insertProduct(product)
 
 	def PUT(self):
-		data = web.data()
-		logPayload(data)
-		product = json.loads(data)
-		validateProduct(product)
-		updateProduct(product, productId)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			data = web.data()
+			logPayload(data)
+			product = json.loads(data)
+			validateProduct(product)
+			updateProduct(product)
 
 class AddProductType:
 	def POST(self):
-		data = web.data()
-		logPayload(data)
-		productType = json.loads(data)
-		insertProductType(productType)
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			data = web.data()
+			logPayload(data)
+			productType = json.loads(data)
+			insertProductType(productType)
 			
 
 ################################################################################

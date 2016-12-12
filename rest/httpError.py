@@ -13,6 +13,14 @@ class BadRequest(RestError):
 	def __init__(self, msg):
 		RestError.__init__(self, '400', msg)
 
+class UnAuthorized(RestError):
+	def __init__(self, msg):
+		RestError.__init__(self, '401', msg)
+
+class Forbidden(RestError):
+	def __init__(self, msg):
+		RestError.__init__(self, '403', msg)
+		
 class InternalServerError(RestError):
 	def __init__(self, msg):
 		RestError.__init__(self, '500', msg)
