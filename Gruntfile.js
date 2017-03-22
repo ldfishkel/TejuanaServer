@@ -41,16 +41,33 @@ module.exports = function(grunt) {
       deploy: {
         src: ['sql/creation.sql', 'sql/seed.sql', 'sql/procedures/*']
       }
+    },
+
+    spawn: {
+      webstart: {
+        command: 'python',
+        commandArgs: ['router.py'],
+        directory: './',
+        groupFiles: true, 
+        passThrough: false,
+        pattern: 'http',
+        opts: {
+          stdio: 'inherit',
+          cwd: __dirname + '/'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-mysql-runfile');
-
+  grunt.loadNpmTasks('grunt-spawn');
+  
   grunt.registerTask('creation', ['mysqlrunfile:creation']);
   grunt.registerTask('proc', ['mysqlrunfile:proc']);
   grunt.registerTask('seed', ['mysqlrunfile:seed']);
   grunt.registerTask('empty', ['mysqlrunfile:empty']);
   grunt.registerTask('seedf', ['mysqlrunfile:seedf']);
-  grunt.registerTask('deploy', ['mysqlrunfile:deploy']);
+  grunt.registerTask('deploy', ['mysqlrunfile:deploy', 'spawn:webstart']);
+  grunt.registerTask('run', ['spawn:webstart']);
 
 };

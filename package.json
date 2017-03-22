@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-mysql-runfile": "~0.2.2"
+    "grunt-mysql-runfile": "~0.2.2",
+    "grunt-spawn": "~1.1.74"
   }
 }
