@@ -35,7 +35,9 @@ urls = (
     '/pickupstatus'   , 'PickUpStatus',
 
     '/purchase/(.*)'  , 'Purchase',
+    '/purchase'       , 'Purchase',
     '/purchasestatus' , 'PurchaseStatus',
+    '/client'         , 'Client',
 
 )
 
