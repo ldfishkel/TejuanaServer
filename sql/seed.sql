@@ -90,17 +90,3 @@ INSERT INTO Tejuana.Address VALUES (7, 'direccion 7', 'zipcode1', 'province1', '
 
 
 INSERT INTO Tejuana.ThrowException VALUES ('No se puede actualizar el stock sin los insumos necesarios correspondientes');
-
-INSERT INTO Tejuana.Purchase VALUES (1, '2017-1-1', 500, 50, 50, 0, 400, TRUE, 1, 1, 1);
-INSERT INTO Tejuana.Purchase VALUES (2, '2017-1-1', 500, 50, 0, 0, 450, FALSE, 1, 1, 1);
-
-INSERT INTO Tejuana.Shipping VALUES (1, 'Correct Address string', 1, 1);
-INSERT INTO Tejuana.Pick_Up VALUES (1, 'PALERMO', 1, 2);
-
-INSERT INTO Tejuana.Order VALUES (1, 5, FALSE, FALSE, 2, 1);
-INSERT INTO Tejuana.Order VALUES (2, 5, FALSE, FALSE, 3, 1);
-INSERT INTO Tejuana.Order VALUES (3, 5, FALSE, FALSE, 4, 1);
-    
-INSERT INTO Tejuana.Order VALUES (4, 5, FALSE, FALSE, 1, 2);
-INSERT INTO Tejuana.Order VALUES (5, 5, FALSE, FALSE, 2, 2);
-INSERT INTO Tejuana.Order VALUES (6, 5, FALSE, FALSE, 3, 2);

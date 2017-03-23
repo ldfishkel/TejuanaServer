@@ -29,7 +29,8 @@ def insertPurchase(purchase):
 	cursor = db.cursor()
 
 	try:
-		sql = "CALL Tejuana.CreatePurchase({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9})".format(purchase["DueDate"], purchase["DueDateMax"], purchase["Client"]["Id"], purchase["Client"]["DefaultAddress"], purchase["PurchaseCommissionMP"], purchase["PurchaseDiscount"], purchase["PurchaseShipping"], purchase["PurchaseCharged"], purchase["PurchaseTotalEarned"], purchase["PurchaseVia"])
+		print purchase["DueDate"]
+		sql = "CALL Tejuana.CreatePurchase('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8})".format(purchase["DueDate"], purchase["DueDateMax"], purchase["Client"], purchase["CommissionMP"], purchase["Discount"], purchase["Shipping"], purchase["Charged"], purchase["TotalEarned"], purchase["Via"])
 
 		logQuery(sql)
 		cursor.execute(sql)
@@ -44,9 +45,9 @@ def insertPurchase(purchase):
 			for order in purchase["Orders"]:
 				
 				if sql is None:
-					sql = "INSERT INTO Tejuana.Order VALUES ({0}, {1}, {2})".format(insertedId, order["Product"]["Id"], order["Amount"])
+					sql = "INSERT INTO Tejuana.Order (order_amount, order_ready, order_cancelled, product_id, purchase_id) VALUES ({0}, {1}, {2}, {3}, {4})".format(order["Amount"], 0, 0, order["Product"], insertedId, order["Product"])
 				else:
-					sql = sql + ",({0}, {1}, {2})".format(prodId, order["Id"], order["Amount"])
+					sql = sql + ",({0}, {1}, {2}, {3}, {4})".format(order["Amount"], 0, 0, order["Product"], insertedId, order["Product"])
 
 			logQuery(sql)
 			cursor.execute(sql)

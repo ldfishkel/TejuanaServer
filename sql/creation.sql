@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS Tejuana.Purchase (
     purchase_id INT AUTO_INCREMENT,
     
 	purchase_due_date DATE,
+	purchase_due_date_max DATE,
     
 	purchase_charged NUMERIC(15, 2) NOT NULL DEFAULT 0,
 	purchase_commission_mp NUMERIC(15, 2) NOT NULL DEFAULT 0,

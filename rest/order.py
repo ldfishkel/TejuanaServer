@@ -13,8 +13,3 @@ class Order:
 	def PUT(self, orderId):
 		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
 			orderReady(orderId)
-
-class Orderr:
-	def GET(self):
-		2/0
-		return "HOLA"
