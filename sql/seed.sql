@@ -74,19 +74,4 @@ INSERT INTO Tejuana.Pick_Up_Status VALUES (3, 'Retirado');
 INSERT INTO Tejuana.Pick_Up_Status VALUES (4, 'Cancelado');
 INSERT INTO Tejuana.Pick_Up_Status VALUES (5, 'Rebotado');
 
-INSERT INTO Tejuana.Client VALUES (1, 'Pepito1', 'pepito1@jose.com', 123456781, 36157481);
-INSERT INTO Tejuana.Client VALUES (2, 'Pepito2', 'pepito2@jose.com', 123456782, 36157482);
-INSERT INTO Tejuana.Client VALUES (3, 'Pepito3', 'pepito3@jose.com', 123456783, 36157483);
-
-INSERT INTO Tejuana.Address VALUES (1, 'direccion 1', 'zipcode1', 'province1', 'region1', 'district1', TRUE, 1);
-INSERT INTO Tejuana.Address VALUES (2, 'direccion 2', 'zipcode1', 'province1', 'region1', 'district1', FALSE, 1);
-INSERT INTO Tejuana.Address VALUES (3, 'direccion 3', 'zipcode1', 'province1', 'region1', 'district1', FALSE, 1);
-
-INSERT INTO Tejuana.Address VALUES (4, 'direccion 4', 'zipcode1', 'province1', 'region1', 'district1', TRUE, 2);
-INSERT INTO Tejuana.Address VALUES (5, 'direccion 5', 'zipcode1', 'province1', 'region1', 'district1', FALSE, 2);
-INSERT INTO Tejuana.Address VALUES (6, 'direccion 6', 'zipcode1', 'province1', 'region1', 'district1', FALSE, 2);
-
-INSERT INTO Tejuana.Address VALUES (7, 'direccion 7', 'zipcode1', 'province1', 'region1', 'district1', TRUE, 3);
-
-
 INSERT INTO Tejuana.ThrowException VALUES ('No se puede actualizar el stock sin los insumos necesarios correspondientes');

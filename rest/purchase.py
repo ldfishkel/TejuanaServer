@@ -4,6 +4,7 @@ from logger.logger import *
 from data.dataAccess import *
 from data.security import *
 from data.purchase import *
+from data.client import *
 from factory.purchase import *
 
 class Purchase:
@@ -41,3 +42,9 @@ class Client:
 			client = json.loads(data)
 			updateClient(client)
 
+	def POST(self):
+		if authAdmin(web.ctx.env.get('HTTP_AUTHORIZATION')):
+			data = web.data()
+			logPayload(data)
+			client = json.loads(data)
+			insertClient(client)

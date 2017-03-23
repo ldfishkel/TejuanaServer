@@ -24,36 +24,35 @@ def updateClient(client):
 		db.close()
 		raise InternalServerError("Error en la base de datos. \n" + errorMessage(e))
 
-def insertPurchase(purchase):
+def insertClient(client):
 	db = connect()
 	cursor = db.cursor()
 
 	try:
-		print purchase["DueDate"]
-		sql = "CALL Tejuana.CreatePurchase('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9})".format(purchase["DueDate"], purchase["DueDateMax"], purchase["Client"], purchase["Address"], purchase["CommissionMP"], purchase["Discount"], purchase["Shipping"], purchase["Charged"], purchase["TotalEarned"], purchase["Via"])
+		sql = "Call Tejuana.InsertClient('{0}', '{1}', '{2}')".format(client["Name"], client["Email"], client["Phone"])
 
 		logQuery(sql)
 		cursor.execute(sql)
 		insertedId = int(cursor.fetchone()[0])
 		logLastInseted(insertedId)
 		
-		if purchase["Orders"]:
+		if client["Addresses"]:
 			cursor.close()
 			cursor = db.cursor()
 			sql = None
 			
-			for order in purchase["Orders"]:
+			for address in client["Addresses"]:
 				
 				if sql is None:
-					sql = "INSERT INTO Tejuana.Order (order_amount, order_ready, order_cancelled, product_id, purchase_id) VALUES ({0}, {1}, {2}, {3}, {4})".format(order["Amount"], 0, 0, order["Product"], insertedId, order["Product"])
+					sql = "INSERT INTO Tejuana.Address (address_address, address_zipcode, address_province, address_region, address_district, address_default, client_id) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6})".format(address["Address"], address["Zipcode"], address["Province"], address["Region"], address["District"], address["Default"], insertedId)
 				else:
-					sql = sql + ",({0}, {1}, {2}, {3}, {4})".format(order["Amount"], 0, 0, order["Product"], insertedId, order["Product"])
+					sql = sql + ",({'{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6})".format(address["Address"], address["Zipcode"], address["Province"], address["Region"], address["District"], address["Default"], insertedId)
 
 			logQuery(sql)
 			cursor.execute(sql)
 		
-		db.commit()
 		cursor.close()
+		db.commit()
 		db.close()
 	
 	except MySQLdb.Error, e:

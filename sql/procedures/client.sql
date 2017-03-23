@@ -14,8 +14,7 @@ BEGIN
 	WHERE 
 		client_name LIKE CONCAT('%', search, '%') OR
 		client_email LIKE CONCAT('%', search, '%') OR
-		client_phone LIKE CONCAT('%', search, '%') OR
-		client_document LIKE CONCAT('%', search, '%');
+		client_phone LIKE CONCAT('%', search, '%');
 END;
 
 /****************************************************************************************************/
@@ -34,8 +33,7 @@ BEGIN
 		cl.client_id = ad.client_id AND
 		(cl.client_name LIKE CONCAT('%', search, '%') OR
 		cl.client_email LIKE CONCAT('%', search, '%') OR
-		cl.client_phone LIKE CONCAT('%', search, '%') OR
-		cl.client_document LIKE CONCAT('%', search, '%'));
+		cl.client_phone LIKE CONCAT('%', search, '%'));
 END;
 
 /****************************************************************************************************/
@@ -58,4 +56,19 @@ BEGIN
 		address_default = TRUE
 	WHERE 
 		address_id = addressId;
+END;
+
+/****************************************************************************************************/
+# InsertClient
+/****************************************************************************************************/
+ 
+DROP PROCEDURE IF EXISTS Tejuana.InsertClient;
+CREATE PROCEDURE Tejuana.InsertClient (name VARCHAR(255), email VARCHAR(255), phone INT)
+BEGIN
+	INSERT INTO 
+		Tejuana.Client (client_name, client_email, client_phone)
+	VALUES
+		(name, email, phone);
+
+	SELECT last_insert_id();
 END;

@@ -117,8 +117,7 @@ CREATE TABLE IF NOT EXISTS Tejuana.Client (
     client_id INT AUTO_INCREMENT,
     client_name VARCHAR(255) NOT NULL,
     client_email VARCHAR(255),
-    client_phone INT,
-    client_document INT,
+    client_phone VARCHAR(50),
     PRIMARY KEY (client_id)
 );
 
@@ -219,7 +218,7 @@ CREATE TABLE IF NOT EXISTS Tejuana.Shipping_Status (
 CREATE TABLE IF NOT EXISTS Tejuana.Shipping (
     shipping_id INT NOT NULL AUTO_INCREMENT,
 
-    shipping_address VARCHAR(255) NOT NULL,
+    shipping_address INT NOT NULL,
 	
 	shipping_status_id INT NOT NULL,
     purchase_id INT NOT NULL,
@@ -228,7 +227,9 @@ CREATE TABLE IF NOT EXISTS Tejuana.Shipping (
     FOREIGN KEY (shipping_status_id)
         REFERENCES Tejuana.Shipping_Status(shipping_status_id),
     FOREIGN KEY (purchase_id)
-        REFERENCES Tejuana.Purchase (purchase_id)
+        REFERENCES Tejuana.Purchase (purchase_id),
+    FOREIGN KEY (shipping_address)
+        REFERENCES Tejuana.Address (address_id)
 );
 
 CREATE TABLE Tejuana.ThrowException (

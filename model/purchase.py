@@ -10,12 +10,11 @@ class PurchaseStatus:
 		self.Name = statusName
 
 class Client:
-	def __init__(self, clientId, clientName, clientEmail, clientPhone, clientDocument):
+	def __init__(self, clientId, clientName, clientEmail, clientPhone):
 		self.Id = clientId
 		self.Name = clientName
 		self.Email = clientEmail
 		self.Phone = clientPhone
-		self.Document = clientDocument
 		self.DefaultAddress = ''
 		self.Addresses = []
 

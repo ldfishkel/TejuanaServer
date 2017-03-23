@@ -28,7 +28,7 @@ def clientListFactory(results, addresses):
 
 	for row in results:
 
-		clients.append(Client(row[0], row[1], row[2], row[3], row[4]))
+		clients.append(Client(row[0], row[1], row[2], row[3]))
 
 	return MyEncoder().encode(map(lambda x : addAddresses(x, addresses), clients))
 

@@ -22,8 +22,17 @@ CREATE PROCEDURE Tejuana.PurchaseList (statusId INT)
 /**************************************************************************************************************************/
 
 DROP PROCEDURE IF EXISTS Tejuana.CreatePurchase;
-CREATE PROCEDURE Tejuana.CreatePurchase (dueDate DATE, dueDateMax DATE, clientId INT, commissionMP NUMERIC(15, 2), discount NUMERIC(15, 2), shipping NUMERIC(15, 2), charged NUMERIC(15, 2), totalEarned NUMERIC(15, 2), via INT)
+CREATE PROCEDURE Tejuana.CreatePurchase (dueDate DATE, dueDateMax DATE, clientId INT, addressId INT, commissionMP NUMERIC(15, 2), discount NUMERIC(15, 2), shipping NUMERIC(15, 2), charged NUMERIC(15, 2), totalEarned NUMERIC(15, 2), via INT)
 BEGIN
+	DECLARE isShipping BOOLEAN;
+	DECLARE purchaseId INT;
+
+	SELECT 
+		shipping IS NOT NULL AND shipping > 0 AND
+		addressId IS NOT NULL AND addressId > 0 
+	INTO 
+		isShipping;
+
 	INSERT INTO
 		Tejuana.Purchase (
 			purchase_due_date,
@@ -45,10 +54,23 @@ BEGIN
 			shipping,
 			discount,
 			totalEarned,
-			(SELECT shipping IS NOT NULL),
+			isShipping,
 			clientId,
 			via,
 			1);
 
-	SELECT last_insert_id();
+	SELECT last_insert_id() INTO purchaseId;
+
+	IF isShipping THEN
+		INSERT INTO
+			Tejuana.Shipping (shipping_address, shipping_status_id, purchase_id)
+		VALUES (addressId, 1, purchaseId);
+	ELSE
+		INSERT INTO
+			Tejuana.Pick_Up (pick_up_locale, pick_up_status_id, purchase_id)
+		VALUES ('FLORESTA', 1, purchaseId);
+	END IF;
+
+	SELECT purchaseId;
+	
 END;
